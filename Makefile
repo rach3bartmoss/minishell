@@ -1,15 +1,35 @@
 NAME = minishell
 
 CC = cc
-FLAGS = -Wall -Wextra -Werror -lreadline -I
+FLAGS = -Wall -Wextra -Werror
+INCLUDES = -I. -Ilibft
 
-SOURCES = main.c
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
+SOURCES = main.c init_data.c tokenizer.c exec_commands.c
 
 OBJ = $(SOURCES:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	@$(CC) $(OBJ) -o $(NAME)
+$(NAME): $(OBJ) $(LIBFT)
+	@$(CC) $(FLAGS) $(OBJ) -Llibft -lft -lreadline -o $(NAME)
 
-$(OBJ)
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_DIR)
+
+%.o: %.c minishell.h
+	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+
+clean:
+	rm -f $(OBJ)
+	@$(MAKE) -C $(LIBFT_DIR) clean
+
+fclean: clean
+	rm -f $(NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
+
+re: fclean all
+
+.PHONY: all clean fclean re
