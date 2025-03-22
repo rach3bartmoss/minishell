@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 00:40:30 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/21 23:21:36 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/22 01:23:36 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ void	sig_int_handler(int something)
 HISTORY MANAGEMENT
 OPTIMIZATIONS
 START TO HANDLE AND PARSE THE TOKENS
+
+FILE DESCRIPTORS TO HANDLE REDIRECTIONS
+
+TO USE EXECVE WE SHOULD FORK(clone) a processe pid_t pid = fork();
+use waitpid to run the child first, prevente the child process to become a zombie
+the target of waitpid must be the parent process
+use exit to end child process
 
 GETCWD RETURNS CURRENT DIR PATH
 CHDIR CHANGES CURRENTE DIR OF THE CALLING PROCESS TO THE DIR SPECIFIED IN THE ARGUMENTE
