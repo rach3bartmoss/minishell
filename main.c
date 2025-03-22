@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 00:40:30 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/21 22:58:55 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/21 23:21:36 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "minishell.h"
 //use -lreadline at compilation
 
-static volatile	int	keepRunning = 1;
+//static volatile	int	keepRunning = 1;
 
 void	sig_int_handler(int something)
 {
@@ -55,7 +55,8 @@ int	main(void)
 		{
 			tokenize_input(shell, ' ');
 			execute_command_pwd(shell);
-			printf("Here is your input: <%s>\n", shell->input);
+			execute_command_exit(shell);
+			//printf("Here is your input: <%s>\n", shell->input);
 			add_history(shell->input);
 			//EXEC COMMANDS
 			free (shell->input);
