@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 09:52:03 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/22 00:25:16 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/23 17:21:45 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	init_data(t_data *shell)
 	shell->pid = 0;
 }
 
+/*
 t_command	**parse_input(t_data *shell)
 {
 	int	i;
@@ -37,4 +38,4 @@ t_command	**parse_input(t_data *shell)
 		commands[i][strlen(shell->tokens[i] + 1)] = '\0';
 		i++;
 	}
-}
+}*/
