@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 00:40:30 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/23 16:42:55 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:30:10 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ int	main(void)
 	shell = malloc(sizeof(t_data));
 	init_data(shell);
 
-	while(keepRunning)
+	while(keepRunning) //REPL
 	{
-		shell->input = readline("PROMPT>$ ");
+		shell->input = readline("PROMPT>$ "); //READ (R)
 		if (shell->input)
 		{
-			tokenize_input(shell, ' ');
-			execute_command_pwd(shell);
-			execute_command_exit(shell);
+			tokenize_input(shell, ' ');// EVAL
+			execute_command_pwd(shell); // PRINT
+			execute_command_exit(shell); // PRINT
 			//printf("Here is your input: <%s>\n", shell->input);
 			add_history(shell->input);
 			//EXEC COMMANDS
