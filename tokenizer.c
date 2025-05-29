@@ -6,28 +6,19 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 09:28:33 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/21 22:25:57 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/05/29 21:42:11 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	clear_token(t_data *shell)
+void	clear_token(t_token *tokens, int token_count)
 {
-	int	i;
-
-	i = 0;
-	if (shell->tokens)
+	for (int i = 0; i < token_count; i++)
 	{
-		while (i < shell->token_count)
-		{
-			free(shell->tokens[i]);
-			i++;
-		}
-		free (shell->tokens);
-		shell->tokens = NULL;
+		free(tokens[i].text);
 	}
-	shell->token_count = 0;
+	free(tokens);
 }
 
 int	token_counter(char *str, char delim)
@@ -50,20 +41,40 @@ int	token_counter(char *str, char delim)
 	return (token_count_res);
 }
 
-char	**split_tokens(char *str, char delim, t_data *shell)
+t_token_type	determine_type(char *token_text)
+{
+	if (ft_strcmp(token_text, "|") == 0)
+		return (T_PIPE);
+	else if (ft_strcmp(token_text, "<") == 0)
+		return (T_REDIR_IN);
+	else if (ft_strcmp(token_text, ">") == 0)
+		return (T_REDIR_OUT);
+	else if (ft_strcmp(token_text, ">>") == 0)
+		return (T_REDIR_APPEND);
+	else if (ft_strcmp(token_text, "<<") == 0)
+		return (T_REDIR_HEREDOC);
+	else if (ft_strcmp(token_text, "&&") == 0)
+		return (T_AND);
+	else if (token_text[0] == '*')
+		return (T_WILDCARD);
+	else
+		return (T_WORD);
+}
+
+t_token	*split_tokens(char *str, char delim, t_lexer *lexer)
 {
 	char	*s;
 	char	*start;
-	char	**tokens;
+	t_token	*tokens;
 	int		len;
 	int		i;
 
 	s = str;
-	tokens = malloc((shell->token_count + 1) * sizeof(char *));
+	tokens = malloc(lexer->token_count * sizeof(t_token));
 	if (!tokens)
 		return (NULL);
 	i = 0;
-	while (*s)
+	while (*s && i < lexer->token_count)
 	{
 		while (*s && *s == delim)
 			s++;
@@ -73,35 +84,36 @@ char	**split_tokens(char *str, char delim, t_data *shell)
 		while (*s && *s != delim)
 			s++;
 		len = s - start;
-		tokens[i] = malloc(len + 1);
-		if (!tokens[i])
+		tokens[i].text = malloc(len + 1);
+		if (!tokens[i].text)
 		{
 			for (int j = 0; j < i; j++)
-				free(tokens[j]);
+				free(tokens[j].text);
 			free(tokens);
 			return (NULL);
 		}
-		//ft_strlcpy(tokens[i], start, len);
-		strncpy(tokens[i], start, len);
-		tokens[i][len] = '\0';
+		ft_strncpy(tokens[i].text, start, len);
+		tokens[i].text[len] = '\0';
+		tokens[i].type = determine_type(tokens[i].text);
 		i++;
 	}
-	tokens[i] = NULL;
+	lexer->tokens = tokens;
 	return (tokens);
 }
 
-void	tokenize_input(t_data *shell, char delim)
+void	lexing_input(t_lexer *lexer, char delim)
 {
 	//add clear_data
-	clear_token(shell);
-	shell->token_count = token_counter(shell->input, delim);
-	shell->tokens = split_tokens(shell->input, delim, shell);
+	clear_token(lexer->tokens, lexer->token_count);
+	lexer->token_count = token_counter(lexer->input, delim);
+	lexer->tokens = split_tokens(lexer->input, delim, lexer);
 }
 
-void	print_tokens(t_data *shell)
+void	print_tokens(t_lexer *lexer)
 {
-	for (int i = 0; i < shell->token_count; i++)
+	for (int i = 0; i < lexer->token_count; i++)
 	{
-		printf("TOKEN: <%s>\n", shell->tokens[i]);
+		printf("TOKEN: <%s>		TYPE: %d\n", lexer->tokens[i].text, lexer->tokens[i].type);
 	}
 }
+

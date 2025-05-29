@@ -7,7 +7,7 @@ INCLUDES = -I. -Ilibft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SOURCES = main.c init_data.c tokenizer.c exec_commands.c
+SOURCES = main.c tokenizer.c 
 
 OBJ = $(SOURCES:.c=.o)
 
@@ -19,7 +19,7 @@ $(NAME): $(OBJ) $(LIBFT)
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
 
-%.o: %.c minishell.h
+%.o: %.c minishell.h lexer.h parser.h
 	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
