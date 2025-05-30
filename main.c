@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 23:15:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/05/29 20:37:56 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/05/30 17:10:12 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	main(void)
 		{
 			lexing_input(lexer, ' '); // READ(2/2)
 			print_tokens(lexer); // PRINT TOKENS
+			add_history(lexer->input);
 			free (lexer->input);
 		}
 		keepRunning = 0;
