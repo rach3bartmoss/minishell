@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 09:28:33 by dopereir          #+#    #+#             */
-/*   Updated: 2025/05/29 21:42:11 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:55:25 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,15 @@
 
 void	clear_token(t_token *tokens, int token_count)
 {
-	for (int i = 0; i < token_count; i++)
+	int	i;
+
+	i = 0;
+	if (!tokens)
+		return ;
+	while (i < token_count)
 	{
 		free(tokens[i].text);
+		i++;
 	}
 	free(tokens);
 }
@@ -103,12 +109,12 @@ t_token	*split_tokens(char *str, char delim, t_lexer *lexer)
 
 void	lexing_input(t_lexer *lexer, char delim)
 {
-	//add clear_data
 	clear_token(lexer->tokens, lexer->token_count);
 	lexer->token_count = token_counter(lexer->input, delim);
 	lexer->tokens = split_tokens(lexer->input, delim, lexer);
 }
 
+//function to print tokens for debugging
 void	print_tokens(t_lexer *lexer)
 {
 	for (int i = 0; i < lexer->token_count; i++)
