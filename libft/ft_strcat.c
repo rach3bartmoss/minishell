@@ -1,41 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtok.c                                        :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 19:34:28 by dopereir          #+#    #+#             */
-/*   Updated: 2025/06/03 23:07:54 by dopereir         ###   ########.fr       */
+/*   Created: 2025/06/03 22:11:23 by dopereir          #+#    #+#             */
+/*   Updated: 2025/06/03 22:12:07 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strtok(char *str, char *sepa)
+char	*ft_strcat(char *dest, const char *src)
 {
-	static char	*stock = NULL;
-	char		*ptr;
-	int			i;
+	unsigned int	i;
+	unsigned int	j;
 
 	i = 0;
-	ptr = NULL;
-	if (str != NULL)
-		stock = ft_strdup(str);
-	while (*stock != '\0')
+	while (dest[i] != '\0')
+		i++;
+	j = 0;
+	while (src[j] != '\0')
 	{
-		if (i == 0 && !ft_strchr(sepa, *stock))
-		{
-			i = 1;
-			ptr = stock;
-		}
-		else if (i == 1 && ft_strchr(sepa, *stock))
-		{
-			*stock = '\0';
-			stock += 1;
-			break ;
-		}
-		stock++;
+		dest[i] = src[j];
+		i++;
+		j++;
 	}
-	return (ptr);
+	dest[i] = '\0';
+	return (dest);
 }

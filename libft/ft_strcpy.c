@@ -1,41 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtok.c                                        :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 19:34:28 by dopereir          #+#    #+#             */
-/*   Updated: 2025/06/03 23:07:54 by dopereir         ###   ########.fr       */
+/*   Created: 2025/06/03 22:13:14 by dopereir          #+#    #+#             */
+/*   Updated: 2025/06/03 22:13:23 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strtok(char *str, char *sepa)
+char	*ft_strcpy(char *dst, char *src)
 {
-	static char	*stock = NULL;
-	char		*ptr;
-	int			i;
+	int	i;
 
 	i = 0;
-	ptr = NULL;
-	if (str != NULL)
-		stock = ft_strdup(str);
-	while (*stock != '\0')
+	while (src[i] != '\0')
 	{
-		if (i == 0 && !ft_strchr(sepa, *stock))
-		{
-			i = 1;
-			ptr = stock;
-		}
-		else if (i == 1 && ft_strchr(sepa, *stock))
-		{
-			*stock = '\0';
-			stock += 1;
-			break ;
-		}
-		stock++;
+		dst[i] = src[i];
+		i++;
 	}
-	return (ptr);
+	dst[i] = '\0';
+	return (dst);
 }
