@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 23:15:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/05/30 17:10:12 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/06/03 22:06:16 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(void)
 	lexer = malloc(sizeof(t_lexer));
 	lexer->input = NULL;
 	lexer->tokens = NULL;
+	lexer->path = NULL;
 	lexer->token_count = 0;
 
 	while(keepRunning)
@@ -28,6 +29,10 @@ int	main(void)
 		{
 			lexing_input(lexer, ' '); // READ(2/2)
 			print_tokens(lexer); // PRINT TOKENS
+			execute(lexer);
+			//parse_function(lexer);
+				// criar t_parse_data -> 
+			
 			add_history(lexer->input);
 			free (lexer->input);
 		}

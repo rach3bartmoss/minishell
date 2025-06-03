@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 01:10:10 by dopereir          #+#    #+#             */
-/*   Updated: 2025/05/29 21:13:51 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/06/03 22:06:03 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ typedef struct s_parsephase_data
 	t_command	*root_command;
 }			t_parse_data;
 
+
+
 static volatile	int	keepRunning = 1;
 
 // cd /some/path/ && ls | grep *.txt > output.txt && cat output.txt
@@ -45,6 +47,6 @@ int		token_counter(char *str, char delim);
 t_token	*split_tokens(char *str, char delim, t_lexer *lexer);
 void	lexing_input(t_lexer *lexer, char delim);
 //exec_commands.c
-//void	execute_command_pwd(t_data *shell);
+void	execute(t_lexer *lexer);
 //void	execute_command_exit(t_data *shell);
 #endif
