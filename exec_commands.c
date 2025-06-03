@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 22:48:16 by dopereir          #+#    #+#             */
-/*   Updated: 2025/06/03 23:17:33 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/06/03 23:26:32 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	execute(t_lexer *lexer)
 	lexer->args[j] = NULL;
 	
 	lexer->path = getenv("PATH");
-	dir = strtok(lexer->path, ":");
+	dir = ft_strtok(lexer->path, ":");
 	while (dir)
 	{
 		ft_strcpy(full_path, dir);
