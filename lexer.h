@@ -6,13 +6,15 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 22:57:27 by dopereir          #+#    #+#             */
-/*   Updated: 2025/05/29 21:43:25 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/06/03 22:48:15 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 # include "minishell.h"
+
+# define MAX_ARGS 1024
 
 // tokens we currently support
 typedef enum e_token_type
@@ -39,6 +41,8 @@ typedef struct s_lexer
 	char	*input;
 	t_token	*tokens;
 	int		token_count;
+	char	*path;
+	char	*args[MAX_ARGS];//this in fact should be at the parser phase
 }			t_lexer;
 
 #endif
