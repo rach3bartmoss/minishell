@@ -6,14 +6,13 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 23:08:53 by dopereir          #+#    #+#             */
-/*   Updated: 2025/06/03 22:36:50 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/06/04 22:57:09 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 # include "minishell.h"
-
 
 typedef struct s_redirect
 {

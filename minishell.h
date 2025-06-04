@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 01:10:10 by dopereir          #+#    #+#             */
-/*   Updated: 2025/06/03 22:06:03 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/06/04 20:58:03 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <readline/history.h>
 # include <string.h>
 # include <stdbool.h>
+# include <sys/wait.h>
+# include <sys/types.h>
 # include "libft/libft.h"
 # include "lexer.h"
 # include "parser.h"

@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 22:48:16 by dopereir          #+#    #+#             */
-/*   Updated: 2025/06/03 23:26:32 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/06/04 22:53:45 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ int	argv_delimiter(char *arg)
 	while (target_tokens[i] != NULL)
 	{
 		if (ft_strcmp(arg, target_tokens[i]) == 0)
-		{
 			return (1);
-		}
 		i++;
 	}
 	return (0);
@@ -43,10 +41,13 @@ void	execute(t_lexer *lexer)
 	char	full_path[1024];
 	int		i;
 	int		j;
+	int		found_path_flag = 0;
+	pid_t	pid;
 
+	//adapt to use curr_cmd, we shall receive the t_parse_data structure and execute one by one
 	command = ft_strdup(lexer->tokens[0].text);//COMMAND ex: LS, ECHO, TOUCH, etc.
 
-	i = 1;
+	i = 0;
 	j = 0;
 	while (i < lexer->token_count && argv_delimiter(lexer->tokens[i].text) == 0) //will create the arguments of the current command
 	{
@@ -65,10 +66,27 @@ void	execute(t_lexer *lexer)
 		ft_strcat(full_path, command);
 		if (access(full_path, X_OK) == 0)
 		{
-			execve(full_path, lexer->args, NULL);
+			found_path_flag = 1;
+			break ;
+			//execve(full_path, lexer->args, NULL);
 		}
 		dir = ft_strtok(NULL, ":");
 	}
+	if (found_path_flag)
+	{
+		pid = fork();
+		if (pid == 0) //child process to execute
+		{
+			execve(full_path, lexer->args, NULL);
+		}
+		else if (pid > 0)
+			wait(NULL);
+		else
+		{
+			perror("fork in exec_commands.c failed");
+		}
+	}
+	
 	free(command);
 	for (i = 0; lexer->args[i] != NULL; i++)
 		free(lexer->args[i]);
