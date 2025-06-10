@@ -37,13 +37,13 @@ int	main(void)
 			print_tokens(lexer); // PRINT TOKENS
 			execute(lexer);
 			//parse_function(lexer);
-				// criar t_parse_data -> 
-			
+				// criar t_parse_data ->
+
 			add_history(lexer->input);
 			free (lexer->input);
 		}
 		//keepRunning = 0;
-		printf("KEEP RUNNING: %d\n", keepRunning);
+		//printf("KEEP RUNNING: %d\n", keepRunning);
 	}
 	return (0);
 }

@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 int	argv_delimiter(char *arg)
 {
 	char	*target_tokens[6];
@@ -36,8 +35,6 @@ int	argv_delimiter(char *arg)
 
 void	execute(t_lexer *lexer)
 {
-	char	*command;
-	char	*dir;
 	char	full_path[1024];
 	int		i;
 	int		j;
@@ -45,7 +42,6 @@ void	execute(t_lexer *lexer)
 	pid_t	pid;
 
 	//adapt to use curr_cmd, we shall receive the t_parse_data structure and execute one by one
-	command = ft_strdup(lexer->tokens[0].text);//COMMAND ex: LS, ECHO, TOUCH, etc.
 
 	i = 0;
 	j = 0;
@@ -56,22 +52,7 @@ void	execute(t_lexer *lexer)
 		j++;
 	}
 	lexer->args[j] = NULL;
-	
-	lexer->path = getenv("PATH");
-	dir = ft_strtok(lexer->path, ":");
-	while (dir)
-	{
-		ft_strcpy(full_path, dir);
-		ft_strcat(full_path, "/");
-		ft_strcat(full_path, command);
-		if (access(full_path, X_OK) == 0)
-		{
-			found_path_flag = 1;
-			break ;
-			//execve(full_path, lexer->args, NULL);
-		}
-		dir = ft_strtok(NULL, ":");
-	}
+	found_path_flag = cmd_path_generator(lexer , full_path);
 	if (found_path_flag)
 	{
 		pid = fork();
@@ -86,8 +67,11 @@ void	execute(t_lexer *lexer)
 			perror("fork in exec_commands.c failed");
 		}
 	}
-	
-	free(command);
 	for (i = 0; lexer->args[i] != NULL; i++)
 		free(lexer->args[i]);
+}
+
+void	exec_parsed_cmds(t_parse_data *cmd_list)
+{
+
 }

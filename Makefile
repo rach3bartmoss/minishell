@@ -7,14 +7,14 @@ INCLUDES = -I. -Ilibft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SOURCES = main.c tokenizer.c exec_commands.c \
+SOURCES = main.c tokenizer.c exec_commands.c execute_helpers.c
 
 OBJ = $(SOURCES:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) -g $(FLAGS) $(OBJ) -Llibft -lft -lreadline -o $(NAME)
+	@$(CC) $(FLAGS) $(OBJ) -Llibft -lft -lreadline -o $(NAME)
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
