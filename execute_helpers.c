@@ -6,38 +6,73 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 09:32:18 by dopereir          #+#    #+#             */
-/*   Updated: 2025/06/10 09:32:20 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/07/06 17:18:43 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "minishell.h"
+#include <linux/limits.h>
+#include <readline/chardefs.h>
 
-//MAY USE THIS FUNCTION TO GENERATE A PATH
-int	cmd_path_generator(t_lexer *lexer, char *full_path)
+char	*ft_strjoin_three(const char *a, const char *b, const char *c)
 {
-	int		found_path_flag;
-	char	*dir;
-	char	*command;
-	char	*path_copy;
+	char	*tmp;
+	char	*res;
 
-	path_copy = ft_strdup(getenv("PATH"));
-	command = ft_strdup(lexer->tokens[0].text);
-	found_path_flag = 0;
-	dir = ft_strtok(path_copy, ":");
-	while (dir)
+	tmp = ft_strjoin(a, b);
+	res = ft_strjoin(tmp, c);
+	free(tmp);
+	return (res);
+}
+
+static void	free_splits(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
 	{
-		ft_strcpy(full_path, dir);
-		ft_strcat(full_path, "/");
-		ft_strcat(full_path, command);
-		if (access(full_path, X_OK) == 0)
-		{
-			found_path_flag = 1;
-			break ;
-		}
-		dir = ft_strtok(NULL, ":");
+		free(arr[i]);
+		i++;
 	}
-	free (command);
-	free (path_copy);
-	return (found_path_flag);
+	free(arr);
+}
+
+char	*cmd_path_helper(char **paths, char *cmd_name)
+{
+	char	*tmp;
+	int		i;
+	i = 0;
+	while (paths[i])
+	{
+		tmp = ft_strjoin_three(paths[i], "/", cmd_name);
+		if (tmp && access(tmp, X_OK) == 0)
+			return (tmp);
+		free(tmp);
+		i++;
+	}
+	return (NULL);
+}
+
+//Give a command name and use this function to return a path
+char	*cmd_path_generator(char *cmd_name, t_env *env)
+{
+	char	**paths;
+	char	*result;
+	char	*custom_path;
+
+	if (!cmd_name || !*cmd_name)
+		return (NULL);
+	custom_path = ft_getenv(env, "PATH");
+	if (!custom_path)
+		return (NULL);
+	paths = ft_split(custom_path, ':');
+	if (!paths)
+		return (NULL);
+	result = cmd_path_helper(paths, cmd_name);
+	free_splits(paths);
+	if (result)
+		return (result);
+	return (cmd_name);
 }
