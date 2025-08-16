@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parser.h"
 
 static void	copy_simple_fields(t_command *src, t_command *dest)
 {
@@ -27,7 +28,8 @@ static void	copy_simple_fields(t_command *src, t_command *dest)
 		dest->output_file = ft_strdup(src->output_file);
 	if (src->hd_delim)
 		dest->hd_delim = ft_strdup(src->hd_delim);
-	dest->pid_filename_output = src->pid_filename_output;
+	if (src->pid_filename_output)
+		dest->pid_filename_output = src->pid_filename_output;
 }
 
 static t_command	*copy_simple_cmd(t_command *src)
@@ -82,13 +84,18 @@ void	free_parsed_data(t_parse_data *parsed_data)
 	int	i;
 
 	i = 0;
-	while (i < parsed_data->n_cmds)
+	while (i < parsed_data->n_cmds && i < MAX_ARGS)
 	{
-		free_command(parsed_data->commands[i]);
-		parsed_data->commands[i] = NULL;
+		if (parsed_data->commands[i])
+		{
+
+			free_command(parsed_data->commands[i]);
+			parsed_data->commands[i] = NULL;
+		}
 		i++;
 	}
 	parsed_data->n_cmds = 0;
+	parsed_data->n_spawn_pids = 0;
 }
 
 // > format_parsed_data(t_lexer *lexer)
@@ -115,7 +122,7 @@ t_parse_data	format_parsed_data(t_lexer *lexer, t_env *my_env)
 
 /* ------------ TESTING FUNCTIONS -------------*/
 
-/*static const char	*type_to_string(t_token_type type)
+static const char	*type_to_string(t_token_type type)
 {
 	switch (type) {
 		case T_WORD:			return "WORD";
@@ -163,4 +170,4 @@ void	print_parsed_data(const t_parse_data *pd)
 		}
 		printf("\n");
 	}
-	}*/
+	}

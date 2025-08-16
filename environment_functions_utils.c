@@ -42,23 +42,6 @@ void	ft_unsetenv(t_env **env, char *key)
 	}
 }
 
-//prints our whole enviroment list USE AS ENV COMMAND
-void	ft_env(t_env *env)
-{
-	printf("GOT FT_ENV DIRECTLY\n");
-	while (env)
-	{
-		if (env->value)
-		{
-			write(STDOUT_FILENO, env->key, ft_strlen(env->key));
-			write(STDOUT_FILENO, "=", 1);
-			write(STDOUT_FILENO, env->value, ft_strlen(env->value));
-			write(STDOUT_FILENO, "\n", 1);
-		}
-		env = env->next;
-	}
-}
-
 //remove one of more vars, uses ft_unsetenv as helper
 int	ft_unset(char **argv, t_env **env)
 {
@@ -81,7 +64,23 @@ int	ft_unset(char **argv, t_env **env)
 	return (exit_code);
 }
 
-static void	add_export(char *arg, t_env **env)
+//prints our whole enviroment list USE AS ENV COMMAND
+void	ft_env(t_env *env)
+{
+	while (env)
+	{
+		if (env->value)
+		{
+			write(STDOUT_FILENO, env->key, ft_strlen(env->key));
+			write(STDOUT_FILENO, "=", 1);
+			write(STDOUT_FILENO, env->value, ft_strlen(env->value));
+			write(STDOUT_FILENO, "\n", 1);
+		}
+		env = env->next;
+	}
+}
+
+static int	add_export(char *arg, t_env **env)
 {
 	char	*eq;
 	size_t	klen;
@@ -89,20 +88,24 @@ static void	add_export(char *arg, t_env **env)
 	char	*value;
 
 	eq = ft_strchr(arg, '=');
+	if (!eq)
+		return (-1);
 	klen = eq - arg;
 	key = ft_strndup(arg, klen);
+	if (!key)
+		return (-1);
 	value = ft_strdup(eq + 1);
-	if (key && value)
-	{
-		ft_setenv(env, key, value);
-		free(key);
-		free(value);
-	}
-	else
+	if (!value)
+		return (free(key), -1);
+	if (replace_env_value(env, key, value) != 0)
 	{
 		free(key);
 		free(value);
+		return (-1);
 	}
+	free(key);
+	free(value);
+	return (0);
 }
 
 int	ft_export(char **argv, t_env **env)
@@ -120,12 +123,12 @@ int	ft_export(char **argv, t_env **env)
 		{
 			printf("minishell: export: '%s': not a valid identifier\n",
 				argv[i]);
-			exit_code = 1;
+			exit_code = -1;
 		}
 		else if (eq)
-			add_export(argv[i], env);
+			exit_code = add_export(argv[i], env);
 		else if (!ft_getenv(*env, argv[i]))
-			ft_setenv(env, argv[i], "");
+			exit_code = replace_env_value(env, argv[i], "");
 		i++;
 	}
 	return (exit_code);

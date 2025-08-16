@@ -37,7 +37,7 @@
 typedef struct s_parsephase_data
 {
 	t_command		*commands[MAX_ARGS];
-	t_command		*root;
+	//t_command		*root;//
 	int				n_cmds;
 	int				n_spawn_pids;
 	int				pd_exit_status;
@@ -60,12 +60,16 @@ typedef struct s_env
 }			t_env;
 
 static volatile sig_atomic_t	g_heredoc_sig = 0;
+//main.c
+void	cleanup_iter(t_lexer *lexer, t_parse_data *pd);
 //tokenizer.c
 void			print_tokens(t_lexer *shell); //FUNCTION FOR TESTING
 void			clear_token(t_token *tokens, int token_count);
 int				token_counter(char *str, char delim);
 t_token			*split_tokens(char *str, char delim, t_lexer *lexer);
 void			lexing_input(t_lexer *lexer, char delim);
+char	*join_words(char *a, char *b);
+int		is_wordish(t_token *t);
 //parser.c
 t_command		*init_command(void);
 t_command		*parse_function(t_lexer *lexer, t_env *my_env);
@@ -82,27 +86,13 @@ int				find_next_pipe(t_lexer *lexer, int start);
 int				find_next_logical_operator(t_lexer *lexer, int start);
 t_lexer			*create_sublexer(t_lexer *lexer, int start, int end);
 void			free_sublexer(t_lexer *sublexer);
-
-t_command	*init_command(void);
-t_command	*parse_function(t_lexer *lexer, t_env *my_env);
-t_command	*parse_sequence(t_lexer *lexer, t_env *my_env);
-//t_command	*parse_pipeline(t_lexer *lexer);
-int	has_pipes(t_lexer *lexer);
-int	has_logical_operators(t_lexer *lexer);
-int	has_variables(t_lexer *lexer);
-int	count_args(t_lexer *lexer);
-void	free_command(t_command *cmd);
-int	find_next_pipe(t_lexer *lexer, int start);
-int	find_next_logical_operator(t_lexer *lexer, int start);
-t_lexer	*create_sublexer(t_lexer *lexer, int start, int end);
-void	free_sublexer(t_lexer *sublexer);
-
 //collect_commands.c
 void			free_parsed_data(t_parse_data *parsed_data);
 t_parse_data	format_parsed_data(t_lexer *lexer, t_env *my_env);
 void			print_parsed_data(const t_parse_data *pd);
 //execute_helpers.c
 char			*cmd_path_generator(char *cmd_name, t_env *env);//TESTING
+int				replace_env_value(t_env **env, char *key, char *value);
 //heredoc_utils.c
 void			heredoc_sig_handler(int ignore);
 int				handle_all_heredocs(t_parse_data *pd, t_env *env);
@@ -111,8 +101,8 @@ int				set_output(t_command *cmd);
 int				set_input(t_command *cmd);
 int				set_pipe(int *read_fd, int *write_fd);
 //environment_functions.c
-void			env_add(t_env **head, char *key, char *value);
-void			env_init(t_env **my_env, char **envp);
+int				env_add(t_env **head, char *key, char *value);
+int				env_init(t_env **my_env, char **envp);
 char			*ft_getenv(t_env *env, char *key);
 void			ft_setenv(t_env **env, char *key, char *value);
 //enviroment_functions_utils.c
@@ -150,12 +140,15 @@ char			*hd_helper_append_char(char *out, char c);
 //exec_commands.c
 int				child_run(t_command *cmd, int fd, t_env **env, int c_pipe[2]);
 void			parent_run(t_command *cmd, int *fd, int pipe_var[2]);
-void			exec_parsed_cmds(t_parse_data *pd, t_env **myenv);
+void			exec_parsed_cmds(t_parse_data *pd, t_env **myenv, t_lexer *lexer);
 //exec_refactoring.c
 int				pre_exec_setups(t_command *cmd, int prev_fd);
 int				pre_exec_setups_2(t_command *cmd, int c_pipe[2], int has_pipe);
 int				pos_exec_error_codes(char *cmd_name, int errno_code);
 int				pre_exec_prep(t_command *cmd, t_env **env, int n, int cp[2]);
-void			exit_code(t_parse_data *pd, t_env **env, pid_t pids[MAX_ARGS]);
+int				exit_code(t_parse_data *pd, t_env **env, pid_t pids[MAX_ARGS]);
+//expand_var_helpers.c
+int		append_char(char **dst, char c);
+char	*expand_word_text(const char *src, int quot, t_env *env, int last_status);
 
 #endif

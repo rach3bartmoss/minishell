@@ -88,10 +88,9 @@ int	pos_exec_error_codes(char *cmd_name, int errno_code)
 	return (exit_code);
 }
 
-//Return values:
-// 0 -> caller continues the program
-// 1 -> caller calls exit(1)
-//-1 -> caller breaks
+// (0) caller continues the program
+// (1) -> caller calls exit(1)
+// (-1) -> caller breaks
 int	pre_exec_prep(t_command *cmd, t_env **env, int n, int cp[2])
 {
 	bool		is_parent_bt;
@@ -111,14 +110,18 @@ int	pre_exec_prep(t_command *cmd, t_env **env, int n, int cp[2])
 	return (0);
 }
 
-void	exit_code(t_parse_data *pd, t_env **env, pid_t pids[MAX_ARGS])
+//Return (-1) on failure
+//Return (0) on sucess
+int	exit_code(t_parse_data *pd, t_env **env, pid_t pids[MAX_ARGS])
 {
 	int		wstatus;
 	int		i;
 	char	*exit_str;
 
+	if (!pd || !env)
+		return (-1);
 	i = 0;
-	while (i < pd->n_spawn_pids)
+	while (i < pd->n_spawn_pids) //percorre para ver os errno de todos os pids child process
 	{
 		if (waitpid(pids[i], &wstatus, 0) >= 0)
 		{
@@ -131,7 +134,10 @@ void	exit_code(t_parse_data *pd, t_env **env, pid_t pids[MAX_ARGS])
 	}
 	exit_str = ft_itoa(pd->pd_exit_status);
 	if (!exit_str)
-		return ;
-	ft_setenv(env, "?", exit_str);
+		return (-1);
+	i = replace_env_value(env, "?", exit_str);
 	free (exit_str);
+	if (i != 0)
+		return (-1);
+	return (0);
 }

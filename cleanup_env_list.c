@@ -18,6 +18,8 @@ void	clean_env_list(t_env **env_list)
 	t_env	*cur;
 	t_env	*next;
 
+	if (!env_list)
+		return ;
 	cur = *env_list;
 	while (cur)
 	{
@@ -108,43 +110,5 @@ char	**env_to_array(t_env *env)
 	return (arr);
 }
 
-/*char	**env_to_array(t_env *env)
-{
-	int		count;
-	t_env	*tmp;
-	char	**arr;
-	int		i;
-
-	count = 0;
-	tmp = env;
-	while (tmp)
-	{
-		count++;
-		tmp = tmp->next;
-	}
-	arr = malloc((count + 1) * sizeof(char *));
-	if (!arr)
-		return (NULL);
-	arr[count] = NULL;
-	tmp = env;
-	i = 0;
-	while (tmp)
-	{
-		const char	*val = (tmp->value) ? tmp->value : "";
-		size_t		klen = ft_strlen(tmp->key);
-		size_t		vlen = ft_strlen(val);
-		char		*s = malloc(klen + 1 + vlen + 1);
-		if (!s)
-		{
-			free_env_array(arr, i);
-			return NULL;
-		}
-		ft_memcpy(s, tmp->key, klen);
-		s[klen] = '=';
-		ft_memcpy(s + klen + 1, val, vlen);
-		s[klen + 1 + vlen] = '\0';
-		arr[i++] = s;
-		tmp = tmp->next;
-	}
-	return (arr);
-}*/
+/*fprintf(stderr, "[clean_env] free node %p key=%p '%s' value=%p '%s'\n",
+(void *)cur, (void *)cur->key, cur->key, (void *)cur->value, cur->value);*/
