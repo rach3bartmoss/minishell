@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 01:10:10 by dopereir          #+#    #+#             */
-/*   Updated: 2025/07/19 01:48:11 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/08/19 21:02:12 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,10 @@ int				pre_exec_prep(t_command *cmd, t_env **env, int n, int cp[2]);
 int				exit_code(t_parse_data *pd, t_env **env, pid_t pids[MAX_ARGS]);
 //expand_var_helpers.c
 int		append_char(char **dst, char c);
-char	*expand_word_text(const char *src, int quot, t_env *env, int last_status);
+char	*expand_word_text(t_env *env, t_token *t);
+//expand_var_helpers2.c
+int				backslash_helper(int i, char **out, char *src, int quot);
+int				process_backslash(int i, char **out, char *src, int quot);
+char			*last_exit_expander(int last_status, char **out);
 
 #endif

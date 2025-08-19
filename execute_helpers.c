@@ -98,7 +98,6 @@ int	replace_env_value(t_env **env, char *key, char *value)
 		}
 		env = &(*env)->next;
 	}
-
 	new_key = ft_strdup(key);
 	if (!new_key)
 		return (-1);

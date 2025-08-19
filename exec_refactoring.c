@@ -13,6 +13,7 @@
 #include "libft/libft.h"
 #include "minishell.h"
 #include "parser.h"
+#include <unistd.h>
 
 //genereally for input setup
 int	pre_exec_setups(t_command *cmd, int prev_fd)
@@ -94,7 +95,11 @@ int	pos_exec_error_codes(char *cmd_name, int errno_code)
 int	pre_exec_prep(t_command *cmd, t_env **env, int n, int cp[2])
 {
 	bool		is_parent_bt;
+	int			saved_stdin;
+	int			saved_stdout;
 
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
 	is_parent_bt = is_parent_builtin(cmd->name);
 	if (is_parent_bt && n == 1)
 	{
@@ -103,6 +108,10 @@ int	pre_exec_prep(t_command *cmd, t_env **env, int n, int cp[2])
 		if (cmd->output_file)
 			set_output(cmd);
 		run_parent_built(cmd, env);
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdin);
+		close(saved_stdout);
 		return (-1);
 	}
 	if (cmd->next_is_pipe && pipe(cp) < 0)
@@ -121,7 +130,7 @@ int	exit_code(t_parse_data *pd, t_env **env, pid_t pids[MAX_ARGS])
 	if (!pd || !env)
 		return (-1);
 	i = 0;
-	while (i < pd->n_spawn_pids) //percorre para ver os errno de todos os pids child process
+	while (i < pd->n_spawn_pids)
 	{
 		if (waitpid(pids[i], &wstatus, 0) >= 0)
 		{

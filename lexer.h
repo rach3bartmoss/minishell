@@ -37,6 +37,8 @@ typedef struct s_token
 	t_token_type	type;
 	char			*text;
 	int				quot;
+	int				exp_exit_status;
+	int				exp_index_consumed;
 	int				join_prev;
 }			t_token;
 

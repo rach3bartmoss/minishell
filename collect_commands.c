@@ -88,7 +88,6 @@ void	free_parsed_data(t_parse_data *parsed_data)
 	{
 		if (parsed_data->commands[i])
 		{
-
 			free_command(parsed_data->commands[i]);
 			parsed_data->commands[i] = NULL;
 		}

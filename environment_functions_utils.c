@@ -113,12 +113,17 @@ int	ft_export(char **argv, t_env **env)
 	int		exit_code;
 	int		i;
 	char	*eq;
+	int		quote_flag;
 
 	i = 1;
+	quote_flag = -1;
 	exit_code = 0;
 	while (argv[i])
 	{
 		eq = ft_strchr(argv[i], '=');
+		if (eq != NULL && *(eq + 1) != '\0' && (*(eq + 1) == '"' || *(eq + 1) == '\'')) // *****
+			quote_flag = 1; //FUNCTION WILL BE CALLED HERE
+		(void)quote_flag;
 		if (argv[i][0] == '\0' || eq == argv[i])
 		{
 			printf("minishell: export: '%s': not a valid identifier\n",
