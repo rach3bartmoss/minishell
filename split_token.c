@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 16:31:44 by nayara            #+#    #+#             */
-/*   Updated: 2025/08/22 22:13:08 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/08/27 21:41:29 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,35 +27,27 @@ char	*handle_variable_token(char *s, int *len)
 
 	start = s;
 	s++;
-	while (*s && (ft_isalnum(*s) || *s == '_' || *s == '?' \
-		|| *s == '!' || *s == '@' || *s == '#' || *s == '$'))
+	while (*s && (ft_isalnum(*s) || *s == '_' || *s == '?'
+			|| *s == '!' || *s == '@' || *s == '#' || *s == '$'))
 		s++;
 	*len = s - start;
 	return (s);
 }
 
-char	*handle_double_quotes(char *s, int *len) //CHANGES HERE
+char	*handle_double_quotes(char *s, int *len)
 {
 	char	*start;
 	char	*p;
-	char	next;
+	int		adv;
 
 	p = s + 1;
 	start = p;
 	while (*p)
 	{
-		if (*p == '\\')
-		{
-			next = p[1];
-			if (next == '"' || next == '\\' || next == '$' || next == '`' || next == '\n')
-			{
-				s += 2;
-				continue ;
-			}
-		}
-		if (*p == '"')
+		adv = handle_doub_quot_helper(p, s);
+		if (adv == 0)
 			break ;
-		p++;
+		p += adv;
 	}
 	*len = p - start;
 	if (*p == '"')
