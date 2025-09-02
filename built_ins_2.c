@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 15:49:02 by dopereir          #+#    #+#             */
-/*   Updated: 2025/08/23 19:06:53 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/09/02 16:04:28 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,25 @@ int	ft_echo(t_parse_data *pd, t_command *cmd)
 	if (newline_flag == 0)
 		write(STDOUT_FILENO, "\n", 1);
 	return (pd->pd_exit_status = 0);
+}
+
+int	ft_exit_helper(char *ptr)
+{
+	char	*endptr;
+	long	val;
+
+	if ((*ptr == '"' && ptr[strlen(ptr) - 1] == '"')
+		|| (*ptr == '\'' && ptr[strlen(ptr) - 1] == '\''))
+	{
+		ptr[strlen(ptr) - 1] = '\0';
+		ptr++;
+	}
+	val = ft_strtol(ptr, &endptr, 10);
+	while (*endptr && ft_isspace((unsigned char)*endptr))
+		endptr++;
+	if (*endptr != '\0')
+		return (2);
+	if (*endptr == '\0')
+		return ((int)(val % 256));
+	return (2);
 }
