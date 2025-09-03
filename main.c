@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 23:15:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/09/02 19:18:01 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/09/03 01:05:54 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ static void	setup_init_signals(void)
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
-	ft_memset(&sa_int, 0, sizeof(sa_int));
-	ft_memset(&sa_quit, 0, sizeof(sa_quit));
+	memset(&sa_int, 0, sizeof(sa_int));
+	memset(&sa_quit, 0, sizeof(sa_quit));
 	sa_int.sa_handler = sigint_handler;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = SA_RESTART;
@@ -123,5 +123,6 @@ int	main(int argc, char **argv, char **envp)
 	}
 	free(lexer);
 	clean_env_list(&my_env);
+	clear_history();
 	return (rc);
 }
