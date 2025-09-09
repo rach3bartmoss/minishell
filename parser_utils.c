@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 17:22:24 by dopereir          #+#    #+#             */
-/*   Updated: 2025/08/26 22:54:18 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:07:19 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	has_pipes(t_lexer *lexer)
 	return (0);
 }
 
-//check if has T_VAR type, 1 if has, 0 if don't
 int	has_variables(t_lexer *lexer)
 {
 	int	i;
@@ -36,6 +35,11 @@ int	has_variables(t_lexer *lexer)
 	i = 0;
 	while (i < lexer->token_count)
 	{
+		if (i > 0 && lexer->tokens[i -1].type == T_REDIR_HEREDOC)
+		{
+			i++;
+			continue ;
+		}
 		if (lexer->tokens[i].type == T_VAR)
 			return (1);
 		i++;

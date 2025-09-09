@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 23:08:53 by dopereir          #+#    #+#             */
-/*   Updated: 2025/08/27 21:46:04 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:06:40 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_command
 	char				*output_file; // Output file for redirection
 	char				*argv[MAX_ARGS]; // Arguments for the command
 	char				*hd_delim; //delimiter to use on heredoc
+	int					hd_expand; // flag 1 -> expand 0 -> n expande
 	int					heredoc_fd;
 	pid_t				pid_filename_output;
 	// para pipelines e sequencias parser phase

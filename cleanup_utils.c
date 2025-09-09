@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:04:00 by dopereir          #+#    #+#             */
-/*   Updated: 2025/09/03 02:12:24 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/09/08 16:55:46 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,21 @@ void	free_lexer_tokens(t_lexer *lexer)
 		lexer->token_count = 0;
 		lexer->input = NULL;
 	}
+	free(lexer);
+}
+
+void	free_export_env(t_parse_data *pd)
+{
+	int	i;
+
+	if (!pd || !pd->export_env)
+		return ;
+	i = 0;
+	while (pd->export_env[i])
+	{
+		free(pd->export_env[i]);
+		i++;
+	}
+	free(pd->export_env);
+	pd->export_env = NULL;
 }

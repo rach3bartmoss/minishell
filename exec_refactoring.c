@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 23:53:08 by dopereir          #+#    #+#             */
-/*   Updated: 2025/08/23 14:57:59 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:06:19 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,14 @@ int	pos_exec_error_codes(char *cmd_name, int errno_code)
 	exit_code = 1;
 	if (errno_code == ENOENT)
 	{
-		printf("Command '%s' not found.\n", cmd_name);
-		free (cmd_name);
+		write_error_case(cmd_name, ENOENT);
+		if (cmd_name)
+			free (cmd_name);
 		return (127);
 	}
 	else if (errno_code == EACCES)
 	{
-		printf("Permission denied: %s\n", cmd_name);
+		write_error_case(cmd_name, EACCES);
 		free (cmd_name);
 		return (126);
 	}
@@ -92,6 +93,7 @@ int	pos_exec_error_codes(char *cmd_name, int errno_code)
 // (0) caller continues the program
 // (1) -> caller calls exit(1)
 // (-1) -> caller breaks
+//cat Makefile | ls > test.txt < sort
 int	pre_exec_prep(t_command *cmd, t_env **env, t_parse_data *pd, int cp[2])
 {
 	bool		is_parent_bt;
